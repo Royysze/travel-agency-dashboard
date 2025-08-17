@@ -7,8 +7,8 @@ export const loginWithGoogle = async () => {
         // Request Google OAuth session with profile/email scopes to allow People API access
         await account.createOAuth2Session(
             OAuthProvider.Google,
-            undefined,
-            undefined,
+            `${window.location.origin}/`,
+            `${window.location.origin}/404`,
             [
                 "https://www.googleapis.com/auth/userinfo.profile",
                 "https://www.googleapis.com/auth/userinfo.email",
@@ -35,8 +35,11 @@ export const getUser = async () => {
                 Query.select(["name", "email", "imageUrl", "joinedAt", "accountId"])
             ]
         );
+
+        return documents.length > 0 ? documents[0] : redirect("/sign-in");
     }catch (e) {
         console.error(e);
+        return null;
     }
 }
 
@@ -123,10 +126,16 @@ export const storeUserData = async () => {
     }
 }
 
-export const getExistingUser = async () => {
+export const getExistingUser = async (id: string) => {
     try {
-
-    }catch (e) {
-        console.error(e);
+        const { documents, total } = await database.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            [Query.equal("accountId", id)]
+        );
+        return total > 0 ? documents[0] : null;
+    } catch (error) {
+        console.error("Error fetching user:", error);
+        return null;
     }
-}
+};
