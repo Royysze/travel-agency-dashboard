@@ -447,7 +447,7 @@
     @apply text-sm font-normal text-gray-100;
   }
   .form-input {
-    @apply p-3.5 border border-light-400 rounded-xl text-base text-dark-300 font-normal;
+    @apply p-3.5 w-full border border-light-400 rounded-xl text-base text-dark-300 font-normal;
   }
   .comboBox-popup {
     @apply absolute z-10 top-24 bg-white border border-gray-200 rounded-xl shadow-200 h-[250px] w-full md:max-w-[660px] overflow-hidden;
